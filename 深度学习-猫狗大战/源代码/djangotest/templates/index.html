@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/css/mycss.css">
+</head>
+<body>
+    <div style="text-align: center">
+    <IMG id="picture" width="auto" height="500" src="/static/img/1.jpg" STYLE="text-align: center">
+        <div>
+
+
+        <p href="javascript:void(0)" class="up-file">
+            <input type="file" value="" name = "file"  id="file" onchange="picSelected()"/>选择图片
+        </p>
+        <p href="javascript:void(0)" class="up-file">
+            <input type="submit" value="提交" onclick="ajaxupload()"/>提交
+        </p>
+
+      <!--      <input type="file" name="file" id="file" onchange="picSelected()">
+            <input type="submit" value="提交" onclick="ajaxupload()"> -->
+        </div>
+        <p id="result" style="font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', monospace;font-size: 20px">hello world!</p>
+    </div>
+    <div id="progressbar" class="spinner" style="visibility: hidden">
+  <div class="spinner-container container1">
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+    <div class="circle3"></div>
+    <div class="circle4"></div>
+  </div>
+  <div class="spinner-container container2">
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+    <div class="circle3"></div>
+    <div class="circle4"></div>
+  </div>
+  <div class="spinner-container container3">
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+    <div class="circle3"></div>
+    <div class="circle4"></div>
+  </div>
+</div>
+<script>
+
+    function picSelected() {
+        var result = document.getElementById("result");
+        var file_obj = document.getElementById('file').files[0];    // 获取上传的文件对象
+        asrc = window.URL.createObjectURL(file_obj);
+        document.getElementById('picture').src=asrc;
+        result.innerText = "";
+    }
+
+    function ajaxupload() {
+        var xhr = new XMLHttpRequest();                            // 创建XMLHttpRequest 对象
+        var fm = new FormData()                                     // 创建表单
+        var result = document.getElementById("result")
+        var progressbar = document.getElementById("progressbar")
+        progressbar.style.visibility="visible";
+        var file_obj = document.getElementById('file').files[0];    // 获取上传的文件对象
+        asrc = window.URL.createObjectURL(file_obj);
+        document.getElementById('picture').src=asrc;
+        console.log(file_obj)                                      // 打印文件对象
+        fm.append('file',file_obj)                                  //  将文件对象添加到form 里面
+        xhr.open('POST', '/upload/', true);                       //  创建post 请求
+        xhr.onreadystatechange = function () {                    //  请求成功执行回调函数
+            if (xhr.readyState == 4) {                            //  服务期返回 状态码 4的时候
+                console.log(xhr.responseText)                       //   打印服务器回调信息
+                result.innerText=xhr.responseText
+                progressbar.style.visibility="hidden"
+            };
+
+        };
+        xhr.send(fm)                                              //   发送数据，请求中包含 文件
+    }
+
+</script>
+
+</body>
+</html>
